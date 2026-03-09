@@ -1,11 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // ===============================
   // ELEMENT REFERENCES
+  // ===============================
   const pForm = document.getElementById("profile-form");
   const wForm = document.getElementById("weight-log-form");
 
   const mTarget = document.getElementById("monthly-target");
   const wHist = document.getElementById("weight-history");
   const rOut = document.getElementById("routine-output");
+
+  const resetProfileBtn = document.getElementById("reset-profile");
+  const resetWeightBtn = document.getElementById("reset-weight-log");
 
   const startBtn = document.getElementById("start-workout");
   const hud = document.getElementById("workout-hud");
@@ -16,7 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const pauseBtn = document.getElementById("pause-workout");
   const stopBtn = document.getElementById("stop-workout");
 
+  // ===============================
   // STATE
+  // ===============================
   let profile = JSON.parse(localStorage.getItem("profile")) || null;
   let logs = JSON.parse(localStorage.getItem("logs")) || [];
 
@@ -30,9 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let baseMph = 0;
   let maxMph = 0;
 
-  // =======================
-  // BEEP SOUND
-  // =======================
+  // ===============================
+  // SOUND BEEP
+  // ===============================
   function beep(freq = 800, dur = 150, vol = 0.3, type = "sine") {
     if (!aCtx) aCtx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = aCtx.createOscillator();
@@ -50,9 +57,9 @@ document.addEventListener("DOMContentLoaded", () => {
     osc.stop(now + dur / 1000);
   }
 
-  // =======================
-  // LOAD SAVED PROFILE
-  // =======================
+  // ===============================
+  // LOAD PROFILE IF EXISTS
+  // ===============================
   if (profile) {
     sex.value = profile.sex;
     age.value = profile.age;
@@ -66,9 +73,9 @@ document.addEventListener("DOMContentLoaded", () => {
     showLogs();
   }
 
-  // =======================
+  // ===============================
   // SAVE PROFILE
-  // =======================
+  // ===============================
   pForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -88,14 +95,59 @@ document.addEventListener("DOMContentLoaded", () => {
     logWeight(profile.currentWeight);
   });
 
-  // =======================
+  // ===============================
+  // RESET PROFILE
+  // ===============================
+  resetProfileBtn.addEventListener("click", () => {
+    if (!confirm("Reset full profile? This cannot be undone.")) return;
+
+    localStorage.removeItem("profile");
+
+    // Optionally clear logs too:
+    // localStorage.removeItem("logs");
+
+    sex.value = "male";
+    age.value = "";
+    height.value = "";
+    current_weight.value = "";
+    target_weight.value = "";
+    fitness_level.value = "low";
+
+    mTarget.innerHTML = "";
+    rOut.innerHTML = "";
+    wHist.innerHTML = "<p>No entries yet.</p>";
+
+    alert("Profile reset.");
+    location.reload();
+  });
+
+  // ===============================
+  // RESET WEIGHT LOG
+  // ===============================
+  resetWeightBtn.addEventListener("click", () => {
+    if (!confirm("Reset entire weight log?")) return;
+
+    logs = [];
+    localStorage.setItem("logs", JSON.stringify(logs));
+
+    wHist.innerHTML = "<p>No entries yet.</p>";
+
+    const canvas = document.getElementById("bmi-chart");
+    const ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    alert("Weight log reset.");
+  });
+
+  // ===============================
   // LOG WEIGHT
-  // =======================
+  // ===============================
   wForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const w = Number(log_weight.value);
     logWeight(w);
+
     log_weight.value = "";
   });
 
@@ -111,15 +163,15 @@ document.addEventListener("DOMContentLoaded", () => {
     showLogs();
   }
 
+  // ===============================
+  // SHOW LOGS + CHART
+  // ===============================
   window._deleteLog = function (i) {
     logs.splice(i, 1);
     localStorage.setItem("logs", JSON.stringify(logs));
     showLogs();
   };
 
-  // =======================
-  // SHOW LOGS + CHART
-  // =======================
   function showLogs() {
     if (!logs.length) {
       wHist.innerHTML = "<p>No entries yet.</p>";
@@ -158,14 +210,16 @@ document.addEventListener("DOMContentLoaded", () => {
     new Chart(ctx, {
       type: "line",
       data: {
-        labels: logs.map(l => l.d),
-        datasets: [{
-          label: "BMI",
-          data: logs.map(l => l.bmi),
-          borderColor: "#0ea5e9",
-          backgroundColor: "rgba(14,165,233,0.25)",
-          tension: 0.3
-        }]
+        labels: logs.map((l) => l.d),
+        datasets: [
+          {
+            label: "BMI",
+            data: logs.map((l) => l.bmi),
+            borderColor: "#0ea5e9",
+            backgroundColor: "rgba(14,165,233,0.25)",
+            tension: 0.2
+          }
+        ]
       },
       options: {
         responsive: true,
@@ -174,9 +228,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // =======================
+  // ===============================
   // MONTHLY TARGET
-  // =======================
+  // ===============================
   function calcTarget() {
     if (!profile) return;
 
@@ -190,7 +244,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const monthly = (0.75 * 4).toFixed(1);
     const stages = Math.ceil(diff / 5);
 
-    let html = `<p>Monthly: ${monthly} kg</p><ul>`;
+    let html = `<p>Monthly target: ${monthly} kg</p><ul>`;
+
     for (let i = 1; i <= stages; i++) {
       html += `<li>Stage ${i}: ${(profile.currentWeight - i * 5).toFixed(1)} kg</li>`;
     }
@@ -199,9 +254,9 @@ document.addEventListener("DOMContentLoaded", () => {
     mTarget.innerHTML = html;
   }
 
-  // =======================
-  // ROUTINE GENERATION
-  // =======================
+  // ===============================
+  // ROUTINE GENERATOR
+  // ===============================
   function genRoutine() {
     if (!profile) return;
 
@@ -211,18 +266,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const strideCm = (hm * (sex === "male" ? 0.415 : 0.413) * 100).toFixed(1);
 
     const baseMiles =
-      age < 60
-        ? sex === "male"
-          ? 5.6
-          : 5.0
-        : sex === "male"
-        ? 4.3
-        : 3.7;
+      age < 60 ? (sex === "male" ? 5.6 : 5.0) : (sex === "male" ? 4.3 : 3.7);
 
-    const startPct = fitnessLevel === "low" ? 0.4 : fitnessLevel === "medium" ? 0.6 : 0.8;
-    const inc = fitnessLevel === "low" ? 0.1 : fitnessLevel === "medium" ? 0.05 : 0.025;
+    const startPct =
+      fitnessLevel === "low" ? 0.4 : fitnessLevel === "medium" ? 0.6 : 0.8;
 
-    baseMph = fitnessLevel === "low" ? 1.9 : fitnessLevel === "medium" ? 2.5 : 3.1;
+    const inc =
+      fitnessLevel === "low" ? 0.1 : fitnessLevel === "medium" ? 0.05 : 0.025;
+
+    baseMph =
+      fitnessLevel === "low" ? 1.9 : fitnessLevel === "medium" ? 2.5 : 3.1;
+
     maxMph = baseMph + (fitnessLevel === "low" ? 1.2 : fitnessLevel === "medium" ? 1.9 : 2.5);
 
     let html = `
@@ -233,13 +287,14 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
     let pct = startPct;
-    for (let w = 1; w <= 12; w += 2) {
+
+    for (let i = 1; i <= 12; i += 2) {
       const miles = (baseMiles * pct).toFixed(1);
       const minutes = Math.round((miles / baseMph) * 60);
 
       html += `
         <tr>
-          <td>${w}-${w + 1}</td>
+          <td>${i}-${Math.min(i + 1, 12)}</td>
           <td>${miles}</td>
           <td>${minutes}</td>
         </tr>
@@ -252,9 +307,9 @@ document.addEventListener("DOMContentLoaded", () => {
     rOut.innerHTML = html;
   }
 
-  // =======================
-  // WORKOUT SESSION
-  // =======================
+  // ===============================
+  // WORKOUT SESSION LOGIC
+  // ===============================
   startBtn.addEventListener("click", () => {
     if (aCtx) aCtx.resume();
 
@@ -281,6 +336,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (isPaused) {
       isPaused = false;
       pauseBtn.textContent = "Pause";
+
       tInterval = setInterval(() => {
         sTime++;
         phTime++;
@@ -297,13 +353,14 @@ document.addEventListener("DOMContentLoaded", () => {
     clearInterval(tInterval);
     hud.style.display = "none";
     startBtn.style.display = "block";
-    beep(600, 250, 0.4);
+
+    beep(500, 200, 0.4);
     alert("Workout complete!");
   });
 
-  // =======================
+  // ===============================
   // UPDATE HUD
-  // =======================
+  // ===============================
   function updateHUD() {
     const mm = String(Math.floor(sTime / 60)).padStart(2, "0");
     const ss = String(sTime % 60).padStart(2, "0");
@@ -352,7 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
     speedEl.textContent = `Speed: ${speed.toFixed(1)} mph`;
 
     if (cue) {
-      beep(tone, 200, 0.35);
+      beep(tone, 150, 0.33);
       speedEl.classList.add("flash");
       setTimeout(() => speedEl.classList.remove("flash"), 350);
     }
