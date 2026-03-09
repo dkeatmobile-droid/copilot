@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8" />
   <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
   <title>FitTrack</title>
 
@@ -11,11 +12,14 @@
   styles.css
 
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-        rel="ps://cdn.jsdelivr.net/npm/chart.js
-</head>
+  https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap
 
+  <!-- Chart.js -->
+  https://cdn.jsdelivr.net/npm/chart.js
+
+</head>
 <body>
+
   <div class="container">
 
     <!-- HEADER -->
@@ -24,11 +28,12 @@
       <h1>FitTrack</h1>
     </header>
 
-    <!-- PROFILE SECTION -->
+    <!-- PROFILE -->
     <section>
       <h2 class="collapsible">Profile <span class="toggle-icon">▼</span></h2>
 
       <div class="content">
+
         <form id="profile-form">
 
           <label>Sex
@@ -40,19 +45,19 @@
           </label>
 
           <label>Age
-            <input type="number" id="age" min="18" required />
+            <input type="number" id="age" min="18" required>
           </label>
 
           <label>Height (cm)
-            <input type="number" id="height" min="100" required />
+            <input type="number" id="height" min="100" required>
           </label>
 
           <label>Weight (kg)
-            <input type="number" id="current-weight" min="30" required />
+            <input type="number" id="current-weight" min="30" required>
           </label>
 
           <label>Target (kg)
-            <input type="number" id="target-weight" min="30" required />
+            <input type="number" id="target-weight" min="30" required>
           </label>
 
           <label>Level
@@ -65,19 +70,19 @@
 
           <button type="submit">Save Profile</button>
 
-          <!-- RESET PROFILE BUTTON -->
-          <button id="reset-profile"
-                  style="background:#ef4444; margin-top:10px;">
+          <!-- RESET PROFILE -->
+          <button id="reset-profile" style="background:#ef4444; margin-top:10px;">
             Reset Profile
           </button>
 
         </form>
 
         <div id="monthly-target"></div>
+
       </div>
     </section>
 
-    <!-- WEIGHT LOG SECTION -->
+    <!-- WEIGHT LOG -->
     <section>
       <h2 class="collapsible">Weight Log <span class="toggle-icon">▼</span></h2>
 
@@ -85,14 +90,13 @@
 
         <form id="weight-log-form">
           <label>Weight (kg)
-            <input type="number" id="log-weight" min="30" required />
+            <input type="number" id="log-weight" min="30" required>
           </label>
 
           <button type="submit">Log</button>
 
-          <!-- RESET WEIGHT LOG BUTTON -->
-          <button id="reset-weight-log"
-                  style="background:#ef4444; margin-top:10px;">
+          <!-- RESET WEIGHT LOG -->
+          <button id="reset-weight-log" style="background:#ef4444; margin-top:10px;">
             Reset Weight Log
           </button>
         </form>
@@ -100,10 +104,11 @@
         <div id="weight-history" class="table-container"></div>
 
         <canvas id="bmi-chart"></canvas>
+
       </div>
     </section>
 
-    <!-- ROUTINE SECTION -->
+    <!-- ROUTINE -->
     <section>
       <h2>Routine</h2>
 
@@ -111,7 +116,6 @@
 
       <button id="start-workout">Start Workout</button>
 
-      <!-- WORKOUT HUD -->
       <div id="workout-hud" style="display:none;">
         <h3>Session</h3>
         <div id="timer-display">00:00</div>
@@ -130,7 +134,7 @@
   <!-- SCRIPT -->
   script.js</script>
 
-  <!-- COLLAPSIBLE LOGIC (fallback) -->
+  <!-- FALLBACK COLLAPSIBLES -->
   <script>
     document.querySelectorAll(".collapsible").forEach((header) => {
       header.addEventListener("click", () => {
@@ -139,5 +143,6 @@
       });
     });
   </script>
+
 </body>
 </html>
