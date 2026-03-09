@@ -21,8 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let logs = JSON.parse(localStorage.getItem("logs")) || [];
 
   let aCtx = null;
-  let sTime = 0;       // total session seconds
-  let phTime = 0;      // phase timer
+  let sTime = 0;
+  let phTime = 0;
   let tInterval = null;
   let isPaused = false;
   let phase = "warmup";
@@ -30,11 +30,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let baseMph = 0;
   let maxMph = 0;
 
-  // BEEP HELPER
+  // =======================
+  // BEEP SOUND
+  // =======================
   function beep(freq = 800, dur = 150, vol = 0.3, type = "sine") {
     if (!aCtx) aCtx = new (window.AudioContext || window.webkitAudioContext)();
     const osc = aCtx.createOscillator();
     const gain = aCtx.createGain();
+
     osc.type = type;
     osc.frequency.value = freq;
     gain.gain.value = vol;
@@ -47,9 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
     osc.stop(now + dur / 1000);
   }
 
-  // ============================
-  // LOAD EXISTING PROFILE
-  // ============================
+  // =======================
+  // LOAD SAVED PROFILE
+  // =======================
   if (profile) {
     sex.value = profile.sex;
     age.value = profile.age;
@@ -63,9 +66,9 @@ document.addEventListener("DOMContentLoaded", () => {
     showLogs();
   }
 
-  // ============================
+  // =======================
   // SAVE PROFILE
-  // ============================
+  // =======================
   pForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -85,11 +88,12 @@ document.addEventListener("DOMContentLoaded", () => {
     logWeight(profile.currentWeight);
   });
 
-  // ============================
+  // =======================
   // LOG WEIGHT
-  // ============================
+  // =======================
   wForm.addEventListener("submit", (e) => {
     e.preventDefault();
+
     const w = Number(log_weight.value);
     logWeight(w);
     log_weight.value = "";
@@ -97,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function logWeight(w) {
     if (!profile) return;
+
     const h = profile.height / 100;
     const bmi = (w / (h * h)).toFixed(2);
     const d = new Date().toLocaleDateString();
@@ -106,16 +111,15 @@ document.addEventListener("DOMContentLoaded", () => {
     showLogs();
   }
 
-  // DELETE
-  window._deleteLog = function (index) {
-    logs.splice(index, 1);
+  window._deleteLog = function (i) {
+    logs.splice(i, 1);
     localStorage.setItem("logs", JSON.stringify(logs));
     showLogs();
   };
 
-  // ============================
-  // SHOW LOGS + BMI CHART
-  // ============================
+  // =======================
+  // SHOW LOGS + CHART
+  // =======================
   function showLogs() {
     if (!logs.length) {
       wHist.innerHTML = "<p>No entries yet.</p>";
@@ -125,7 +129,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let html = `
       <table>
         <tr>
-          <th>Date</th><th>kg</th><th>BMI</th><th>Δkg</th><th>ΔBMI</th><th></th>
+          <th>Date</th><th>kg</th><th>BMI</th>
+          <th>Δkg</th><th>ΔBMI</th><th></th>
         </tr>
     `;
 
@@ -149,21 +154,18 @@ document.addEventListener("DOMContentLoaded", () => {
     html += "</table>";
     wHist.innerHTML = html;
 
-    // CHART
     const ctx = document.getElementById("bmi-chart").getContext("2d");
     new Chart(ctx, {
       type: "line",
       data: {
-        labels: logs.map((l) => l.d),
-        datasets: [
-          {
-            label: "BMI",
-            data: logs.map((l) => l.bmi),
-            borderColor: "#0ea5e9",
-            backgroundColor: "rgba(14,165,233,0.25)",
-            tension: 0.3
-          }
-        ]
+        labels: logs.map(l => l.d),
+        datasets: [{
+          label: "BMI",
+          data: logs.map(l => l.bmi),
+          borderColor: "#0ea5e9",
+          backgroundColor: "rgba(14,165,233,0.25)",
+          tension: 0.3
+        }]
       },
       options: {
         responsive: true,
@@ -172,11 +174,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // ============================
+  // =======================
   // MONTHLY TARGET
-  // ============================
+  // =======================
   function calcTarget() {
     if (!profile) return;
+
     const diff = profile.currentWeight - profile.targetWeight;
 
     if (diff <= 0) {
@@ -191,49 +194,45 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i = 1; i <= stages; i++) {
       html += `<li>Stage ${i}: ${(profile.currentWeight - i * 5).toFixed(1)} kg</li>`;
     }
+
     html += "</ul>";
     mTarget.innerHTML = html;
   }
 
-  // ============================
-  // ROUTINE GENERATOR
-  // ============================
+  // =======================
+  // ROUTINE GENERATION
+  // =======================
   function genRoutine() {
     if (!profile) return;
+
     const { sex, age, height, fitnessLevel } = profile;
 
     const hm = height / 100;
-    const k = sex === "male" ? 0.415 : sex === "female" ? 0.413 : 0.414;
-    const stride = (hm * k * 100).toFixed(1);
+    const strideCm = (hm * (sex === "male" ? 0.415 : 0.413) * 100).toFixed(1);
 
     const baseMiles =
       age < 60
         ? sex === "male"
           ? 5.6
-          : sex === "female"
-          ? 5
-          : 5.3
+          : 5.0
         : sex === "male"
         ? 4.3
-        : sex === "female"
-        ? 3.7
-        : 4;
+        : 3.7;
 
-    const lvl = fitnessLevel;
-    const start = lvl === "low" ? 0.4 : lvl === "medium" ? 0.6 : 0.8;
-    const inc = lvl === "low" ? 0.1 : lvl === "medium" ? 0.05 : 0.025;
+    const startPct = fitnessLevel === "low" ? 0.4 : fitnessLevel === "medium" ? 0.6 : 0.8;
+    const inc = fitnessLevel === "low" ? 0.1 : fitnessLevel === "medium" ? 0.05 : 0.025;
 
-    baseMph = lvl === "low" ? 1.9 : lvl === "medium" ? 2.5 : 3.1;
-    maxMph = baseMph + (lvl === "low" ? 1.2 : lvl === "medium" ? 1.9 : 2.5);
+    baseMph = fitnessLevel === "low" ? 1.9 : fitnessLevel === "medium" ? 2.5 : 3.1;
+    maxMph = baseMph + (fitnessLevel === "low" ? 1.2 : fitnessLevel === "medium" ? 1.9 : 2.5);
 
     let html = `
       <p>Target distance: ${baseMiles.toFixed(1)} miles/day</p>
-      <p>Stride: ${stride} cm</p>
+      <p>Stride: ${strideCm} cm</p>
       <table>
-        <tr><th>Weeks</th><th>Miles</th><th>Time (min)</th></tr>
+        <tr><th>Weeks</th><th>Miles</th><th>Minutes</th></tr>
     `;
 
-    let pct = start;
+    let pct = startPct;
     for (let w = 1; w <= 12; w += 2) {
       const miles = (baseMiles * pct).toFixed(1);
       const minutes = Math.round((miles / baseMph) * 60);
@@ -253,11 +252,12 @@ document.addEventListener("DOMContentLoaded", () => {
     rOut.innerHTML = html;
   }
 
-  // ============================
-  // WORKOUT TIMER
-  // ============================
+  // =======================
+  // WORKOUT SESSION
+  // =======================
   startBtn.addEventListener("click", () => {
     if (aCtx) aCtx.resume();
+
     hud.style.display = "block";
     startBtn.style.display = "none";
 
@@ -278,3 +278,90 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   pauseBtn.addEventListener("click", () => {
+    if (isPaused) {
+      isPaused = false;
+      pauseBtn.textContent = "Pause";
+      tInterval = setInterval(() => {
+        sTime++;
+        phTime++;
+        updateHUD();
+      }, 1000);
+    } else {
+      isPaused = true;
+      pauseBtn.textContent = "Resume";
+      clearInterval(tInterval);
+    }
+  });
+
+  stopBtn.addEventListener("click", () => {
+    clearInterval(tInterval);
+    hud.style.display = "none";
+    startBtn.style.display = "block";
+    beep(600, 250, 0.4);
+    alert("Workout complete!");
+  });
+
+  // =======================
+  // UPDATE HUD
+  // =======================
+  function updateHUD() {
+    const mm = String(Math.floor(sTime / 60)).padStart(2, "0");
+    const ss = String(sTime % 60).padStart(2, "0");
+    timerEl.textContent = `${mm}:${ss}`;
+
+    let speed = baseMph;
+    let cue = false;
+    let tone = 800;
+
+    if (phase === "warmup") {
+      phaseEl.textContent = "Warm-up";
+      speed = baseMph + (phTime / 300) * (maxMph - baseMph);
+
+      if (phTime >= 300) {
+        phase = "main";
+        phTime = 0;
+        cue = true;
+        tone = 1000;
+      }
+    }
+
+    else if (phase === "main") {
+      phaseEl.textContent = "Main";
+
+      const block = Math.floor(phTime / 60) % 2;
+      speed = block === 0 ? maxMph : baseMph + 0.6;
+
+      if (sTime >= 1200) {
+        phase = "cooldown";
+        phTime = 0;
+        cue = true;
+        tone = 500;
+      }
+    }
+
+    else if (phase === "cooldown") {
+      phaseEl.textContent = "Cool-down";
+      speed = maxMph - (phTime / 300) * (maxMph - baseMph);
+
+      if (phTime >= 300) {
+        stopBtn.click();
+        return;
+      }
+    }
+
+    speedEl.textContent = `Speed: ${speed.toFixed(1)} mph`;
+
+    if (cue) {
+      beep(tone, 200, 0.35);
+      speedEl.classList.add("flash");
+      setTimeout(() => speedEl.classList.remove("flash"), 350);
+    }
+  }
+
+  // INITIAL LOAD
+  if (profile) {
+    calcTarget();
+    genRoutine();
+    showLogs();
+  }
+});
