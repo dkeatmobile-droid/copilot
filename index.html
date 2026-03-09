@@ -2,130 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>FitTrack</title>
-
-  <!-- Styles -->
-  styles.css
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap"
-    rel="stylesheethttps://cdn.jsdelivrt.js</script>
-
-  <!-- Required so inline delete buttons can call deleteLog() -->
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    window._deleteLog = null;
-    window.deleteLog = function (i) {
-      if (typeof window._deleteLog === "function") {
-        window._deleteLog(i);
-      }
-    };
+    window._deleteLog=null;
+    window.deleteLog=function(i){if(typeof window._deleteLog==="function")window._deleteLog(i);};
   </script>
 </head>
-
 <body>
   <div class="container">
-    <!-- HEADER -->
     <header>
-      <!-- Make sure you upload "logo.png" to your repo root -->
-      <img src="logo.png" alt="ck</h1>
+      <img src="logo.png" alt="FitTrack Logo" class="app-logo">
+      <h1>FitTrack</h1>
     </header>
-
-    <!-- PROFILE SECTION -->
     <section>
-      <h2 class="collapsible">
-        Profile <span class="toggle-icon">▼</span>
-      </h2>
-
+      <h2 class="collapsible">Profile <span class="toggle-icon">▼</span></h2>
       <div class="content">
         <form id="profile-form">
-
-          <label>
-            Sex
-            <select id="sex">
-              <option>male</option>
-              <option>female</option>
-              <option>other</option>
-            </select>
-          </label>
-
-          <label>
-            Age
-            <input type="number" id="age" min="18" required>
-          </label>
-
-          <label>
-            Height (cm)
-            <input type="number" id="height" min="100" required>
-          </label>
-
-          <label>
-            Weight (kg)
-            <input type="number" id="current-weight" min="30" required>
-          </label>
-
-          <label>
-            Target (kg)
-            <input type="number" id="target-weight" min="30" required>
-          </label>
-
-          <label>
-            Level
-            <select id="fitness-level">
-              <option>low</option>
-              <option>medium</option>
-              <option>high</option>
-            </select>
-          </label>
-
+          <label>Sex<select id="sex"><option>male</option><option>female</option><option>other</option></select></label>
+          <label>Age<input type="number" id="age" min="18" required></label>
+          <label>Height (cm)<input type="number" id="height" min="100" required></label>
+          <label>Weight (kg)<input type="number" id="current-weight" min="30" required></label>
+          <label>Target (kg)<input type="number" id="target-weight" min="30" required></label>
+          <label>Level<select id="fitness-level"><option>low</option><option>medium</option><option>high</option></select></label>
           <button type="submit">Save Profile</button>
         </form>
-
         <div id="monthly-target"></div>
       </div>
     </section>
-
-    <!-- WEIGHT LOG -->
     <section>
-      <h2 class="collapsible">
-        Weight Log <span class="toggle-icon">▼</span>
-      </h2>
-
+      <h2 class="collapsible">Weight Log <span class="toggle-icon">▼</span></h2>
       <div class="content">
         <form id="weight-log-form">
-          <label>
-            Weight (kg)
-            <input type="number" id="log-weight" min="30" required>
-          </label>
+          <label>Weight (kg)<input type="number" id="log-weight" min="30" required></label>
           <button type="submit">Log</button>
         </form>
-
         <div id="weight-history" class="table-container"></div>
-
-        <div class="chart-wrapper">
-          <canvas id="bmi-chart"></canvas>
-        </div>
+        <div class="chart-wrapper"><canvas id="bmi-chart"></canvas></div>
       </div>
     </section>
-
-    <!-- ROUTINE -->
     <section>
       <h2>Routine</h2>
-
       <div id="routine-output"></div>
-
       <button id="start-workout">Start Workout</button>
-
-      <!-- WORKOUT HUD -->
-      <div id="workout-hud" style="display: none;">
+      <div id="workout-hud" style="display:none;">
         <h3>Session</h3>
-
         <div id="timer-display">00:00</div>
         <div id="speed-prompt">Ready...</div>
         <div id="phase">Warm-up</div>
-
         <div class="hud-controls">
           <button id="pause-workout">Pause</button>
           <button id="stop-workout">Stop & Complete</button>
@@ -133,17 +60,12 @@
       </div>
     </section>
   </div>
-
-  <!-- Main App Logic -->
-  script.js</script>
-
-  <!-- Collapsible fallback -->
+  <script src="script.js"></script>
   <script>
-    document.querySelectorAll(".collapsible").forEach(header => {
-      header.addEventListener("click", () => {
-        header.classList.toggle("active");
-        const content = header.nextElementSibling;
-        if (content) content.classList.toggle("show");
+    document.querySelectorAll('.collapsible').forEach(h=>{
+      h.addEventListener('click',()=>{
+        h.classList.toggle('active');
+        const c=h.nextElementSibling; if(c) c.classList.toggle('show');
       });
     });
   </script>
