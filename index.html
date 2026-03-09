@@ -13,11 +13,10 @@
 
   <!-- Fonts -->
   <link
-    hrefgoogleapis.com/css2?family=Poppins:wght@400;600;700&display=swap
+    href="https://fonts.googleapis.com/css2?family0;600;700&display=swap
 
   <!-- Chart.js -->
-  <script src="httpsvr.net/npm/chart.js</script>
-
+  <script src="https://cdn.jsdelivr.net/npm/chart
 </head>
 <body class="theme-dark">
 
@@ -77,7 +76,7 @@
   <section id="dashboard-screen" class="screen active">
 
     <header class="dash-header">
-      <img src="     <h1>FitTrack Dashboard</h1>
+      <img src="logo.png" class=" Dashboard</h1>
       <p class="muted">Your daily snapshot</p>
     </header>
 
@@ -128,16 +127,11 @@
   ======================= -->
   <main id="stacked-content" class="screen hidden">
 
-
     <!-- PROFILE SECTION -->
     <section id="profile-section">
-      <h2 class="collapsible">
-        Profile <span class="toggle-icon">▼</span>
-      </h2>
-
+      <h2 class="collapsible">Profile <span class="toggle-icon">▼</span></h2>
       <div class="content">
         <form id="profile-form">
-
           <label>Sex
             <select id="sex">
               <option>male</option>
@@ -171,7 +165,6 @@
           </label>
 
           <button type="submit">Save Profile</button>
-
           <button id="reset-profile" class="danger">Reset Profile</button>
         </form>
 
@@ -179,37 +172,27 @@
       </div>
     </section>
 
-
     <!-- LOGS SECTION -->
     <section id="logs-section">
-      <h2 class="collapsible">
-        Weight Log <span class="toggle-icon">▼</span>
-      </h2>
-
+      <h2 class="collapsible">Weight Log <span class="toggle-icon">▼</span></h2>
       <div class="content">
         <form id="weight-log-form">
           <label>Weight (kg)
             <input type="number" id="log-weight" min="30" required>
           </label>
-
           <button type="submit">Log</button>
-
           <button id="reset-weight-log" class="danger">Reset Weight Log</button>
         </form>
 
         <div id="weight-history" class="table-container"></div>
-
         <canvas id="bmi-chart"></canvas>
       </div>
     </section>
 
-
     <!-- ROUTINE SECTION -->
     <section id="routine-section">
       <h2>Routine</h2>
-
       <div id="routine-output"></div>
-
       <button id="start-workout">Start Workout</button>
 
       <div id="workout-hud" style="display:none;">
@@ -225,15 +208,10 @@
       </div>
     </section>
 
-
     <!-- CALORIES SECTION -->
     <section id="calories-section">
-      <h2 class="collapsible">
-        Calorie Calculator <span class="toggle-icon">▼</span>
-      </h2>
-
+      <h2 class="collapsible">Calorie Calculator <span class="toggle-icon">▼</span></h2>
       <div class="content">
-
         <label>Activity Level
           <select id="activity-level">
             <option value="1.2">Sedentary</option>
@@ -248,44 +226,3 @@
           <p><strong>BMR:</strong> <span id="bmr-output">—</span> kcal</p>
           <p><strong>TDEE:</strong> <span id="tdee-output">—</span> kcal</p>
           <p><strong>Lose (−500):</strong> <span id="def500-output">—</span> kcal</p>
-          <p><strong>Lose (−750):</strong> <span id="def750-output">—</span> kcal</p>
-          <p><strong>Gain (+300):</strong> <span id="surplus300-output">—</span> kcal</p>
-        </div>
-
-        <canvas id="calorie-bar"></canvas>
-
-      </div>
-    </section>
-
-
-    <!-- SETTINGS SECTION -->
-    <section id="settings-section">
-      <h2 class="collapsible">
-        Settings <span class="toggle-icon">▼</span>
-      </h2>
-
-      <div class="content">
-        <button id="theme-toggle-settings">Toggle Theme</button>
-        <button id="clear-all" class="danger">Clear ALL Data</button>
-      </div>
-    </section>
-
-  </main>
-
-
-  <!-- MAIN APP SCRIPT -->
-  script.js</script>
-
-  <!-- COLLAPSIBLE FALLBACK -->
-  <script>
-    document.querySelectorAll(".collapsible").forEach((header) => {
-      header.addEventListener("click", () => {
-        header.classList.toggle("active");
-        header.nextElementSibling.classList.toggle("show");
-      });
-    });
-  </script>
-
-</body>
-</html>
-``
