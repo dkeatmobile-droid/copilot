@@ -226,3 +226,37 @@
           <p><strong>BMR:</strong> <span id="bmr-output">—</span> kcal</p>
           <p><strong>TDEE:</strong> <span id="tdee-output">—</span> kcal</p>
           <p><strong>Lose (−500):</strong> <span id="def500-output">—</span> kcal</p>
+          <p><strong>Lose (−750):</strong> <span id="def750-output">—</span> kcal</p>
+          <p><strong>Gain (+300):</strong> <span id="surplus300-output">—</span> kcal</p>
+        </div>
+
+        <canvas id="calorie-bar"></canvas>
+      </div>
+    </section>
+
+    <!-- SETTINGS SECTION -->
+    <section id="settings-section">
+      <h2 class="collapsible">Settings <span class="toggle-icon">▼</span></h2>
+      <div class="content">
+        <button id="theme-toggle-settings">Toggle Theme</button>
+        <button id="clear-all" class="danger">Clear ALL Data</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MAIN APP SCRIPT -->
+  script.js</script>
+
+  <!-- COLLAPSIBLE FALLBACK -->
+  <script>
+    document.querySelectorAll(".collapsible").forEach((header) => {
+      header.addEventListener("click", () => {
+        header.classList.toggle("active");
+        header.nextElementSibling.classList.toggle("show");
+      });
+    });
+  </script>
+
+</body>
+</html>
