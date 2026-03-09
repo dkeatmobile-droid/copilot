@@ -115,3 +115,46 @@ select {
   padding: 10px 14px;
   background: #1e293b;
   border: 1px solid #475569;
+  /* ============================
+   FORCE ALL TEXT TO BE WHITE
+   ============================ */
+body,
+h1, h2, h3, h4, h5, h6,
+p, label, span,
+table, th, td,
+button,
+input, select,
+#speed-prompt,
+#phase,
+#timer-display,
+#routine-output,
+#monthly-target,
+#weight-history {
+  color: #ffffff !important;
+}
+
+/* Icons + arrows */
+.toggle-icon {
+  color: #ffffff !important;
+}
+
+/* Delete button */
+.delete-btn {
+  color: #ffffff !important;
+}
+
+/* Up / Down arrows */
+.up, .down {
+  color: #ffffff !important;
+}
+
+/* Workout HUD text */
+#workout-hud * {
+  color: #ffffff !important;
+}
+
+/* Force placeholder text white too */
+input::placeholder,
+textarea::placeholder {
+  color: #ffffff !important;
+}
