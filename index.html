@@ -1,31 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  />
-  <meta name="theme-color" content="#0b0f19" />
-  <title>FitTrack PWA (Base)</title>
 
-  <!-- PWA -->
-  manifest.webmanifest
-  icons/icon-192.png
-  icons/icon-512.png
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <meta name="theme-color" content="#0b0f19" />
+  <title>FitTrack</title>
 
   <!-- Styles -->
   styles.css
-</head>
-<body class="theme-dark">
-  <main class="container">
-    <h1>FitTrack PWA — Base</h1>
-    <p id="status">Loading…</p>
-    <p>If you can see this text styled in white on a dark background, CSS is working.</p>
-    logo.png
-  </main>
 
-  <!-- App script -->
+  <!-- PWA Manifest -->
+  manifest.webmanifest
+
+  <!-- Icons -->
+  icons/icon-192.png
+  <link rel="512.png
+  icons/icon-192.png
+
+  <!-- Google Fonts -->
+  https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap
+
+  <!-- Chart.js -->
+  https://cdn.jsdelivr.net/npm/chart.js</script>
+</head ======================
+       FIXED TOP NAVIGATION
+  ======================= -->
+  <nav class="topnav" id="topnav">
+    <button class="nav-btn" data-nav="dashboard">
+      <svg class="ico" viewBox="0 0 24 24">
+        <path d="M12 3l8 6v11H4V9z" fill="currentColor"></path>
+      </svg>
+      <span>Dashboard</span>
+    </button>
+
+    <button class="nav-btn" data-nav="profile">
+      <svg class="ico" viewBox="0 0 24 24">
+        <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5zm0 2c-4 0-8 2-8 5v1h16v-1c0-3-4-5-8-5z"
+              fill="currentColor"/>
+      </svg>
+      <span>Profile</span>
+    </button>
+
+    <button class="nav-btn" data-nav="logs">
+      <svg class="ico" viewBox="0 0 24 24">
+        <path d="M4 19h16M6 5v14M9 9v10M12 12v7M15 7v12M18 10v9"
+              stroke="currentColor" stroke-width="2" fill="none"/>
+      </svg>
+      <span>Logs</span>
+    </button>
+
+    <button class="nav-btn" data-nav="routine">
+      <svg class="ico" viewBox="0 0 24 24">
+        <path d="M12 4a3 3 0 1 1-3 3 3 3 0 0 1 3-3zm-5 16l2-6 3 3v3h2v-4l-3-3 1-4 3 3 4 1V9l-4-1-3-3H9L7 11l3 3-2 6z"
+              fill="currentColor"/>
+      </svg>
+      <span>Routine</span>
+    </button>
+
+    <button class="nav-btn" data-nav="calories">
+      <svg class="ico" viewBox="0 0 24 24">
+        <path d="M12 2c0 3-4 5-4 10a4 4 0 1 0 8 0c0-5-4-7-4-10z"
+              fill="currentColor"/>
+      </svg>
+      <span>Calories</span>
+    </button>
+
+    <button class="nav-btn" data-nav="settings">
+      <svg class="ico" viewBox="0 0 24 24">
+        <path d="M12 15a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm9-3l-1.5 1.3.3 2-2 .8-.8 2-2-.3L12 21l-1.3-1.5-2 .3-.8-2-2-.8.3-2L3 12l1.5-1.3-.3-2 2-.8.8-2 2 .3L12 3l1.3 1.5 2-.3.8 2 2 .8-.3 2z"
+              fill="currentColor"/>
+      </svg>
+      <span>Settings</span>
+    </button>
+
+    <button id="theme-toggle" class="theme-btn">Theme</button>
+  </nav>
+
+  <!-- ======================
+       DASHBOARD SCREEN
+  ======================= -->
+  <section id="dashboard-screen" class="screen active">
+
+    <header class="dash-header">
+      logo.png
+      <h1>FitTrack Dashboard</h1>
+      <p class="muted">Your daily snapshot</p>
+    </header>
+
+    <div class="cards">
+      <div class="card">
+        <h3>Latest Weight</h3>
+        <div class="card-value"><span id="latest-weight">—</span> kg</div>
+        <p class="muted" id="latest-weight-date">No entries yet</p>
+      </div>
+
+      <div class="card">
+        <h3>Current BMI</h3>
+        <div class="card-value"><span id="current-bmi">—</span></div>
+        <p class="muted" id="bmi-note">Enter profile</p>
+      </div>
+
+      <div class="card">
+        <h3>Calories Today</h3>
+        <div class="card-value"><span id="today-calories">—</span> kcal</div>
+        <p class="muted" id="calorie-note">No activity set</p>
+      </div>
+    </div>
+
+    <div class="graphs">
+      <div class="graph-block">
+        <h3>Weight Trend</h3>
+        <canvas id="dash-weight-chart"></canvas>
+      </div>
+
+      <div class="graph-block">
+        <h3>BMI Trend</h3>
+        <canvas id="dash-bmi-chart"></canvas>
+      </div>
+
+      <div class="graph-block">
+        <h3>Calories Trend</h3>
+        <canvas id="dash-calorie-chart"></canvas>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ======================
+       OTHER SCREENS (PROFILE, LOGS, ROUTINE, CALORIES, SETTINGS)
+       — omitted here for space —
+       You already have them in your previous full script
+       and I will send them next in BATCH 2.
+  ======================= -->
+
+  <!-- Main App Script -->
   script.js</script>
+
 </body>
 </html>
