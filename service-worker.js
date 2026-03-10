@@ -1,5 +1,5 @@
-// FitTrack - Minimal PWA SW
-const CACHE_NAME = 'fittrack-pwa-base-v1';
+// FitTrack PWA Service Worker
+const CACHE_NAME = 'fittrack-v3-20260310';
 const ASSETS = [
   './',
   './index.html',
@@ -8,18 +8,19 @@ const ASSETS = [
   './manifest.webmanifest',
   './logo.png',
   './icons/icon-192.png',
-  './icons/icon-512.png'
+  './icons/icon-512.png',
+  // third-party (Chart.js) will be cached at runtime
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((c) => c.addAll(ASSETS)));
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS)));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.map((k) => (k === CACHE_NAME ? Promise.resolve() : caches.delete(k))))
+      Promise.all(keys.map((k) => (k !== CACHE_NAME ? caches.delete(k) : Promise.resolve())))
     )
   );
   self.clients.claim();
