@@ -1,9 +1,9 @@
 {
-  "name": "FitTrack",
+  "name": "FitTrack PWA (Base)",
   "short_name": "FitTrack",
-  "description": "Fitness tracker with dashboard, logs, routine and calories",
-  "start_url": "./?source=pwa",
-  "scope": "./",
+  "description": "Minimal PWA base for FitTrack. Installable, offline-ready skeleton.",
+  "start_url": "/copilot/?source=pwa",
+  "scope": "/copilot/",
   "display": "standalone",
   "background_color": "#0b0f19",
   "theme_color": "#0b0f19",
